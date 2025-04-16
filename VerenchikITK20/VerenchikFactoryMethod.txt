@@ -1,0 +1,112 @@
+using System;
+
+namespace VerenchikFactoryMethod
+{
+	public abstract class TetrisFigure
+	{
+		public abstract void Display();
+	}
+
+	public class LineFigure : TetrisFigure
+	{
+		public override void Display()
+		{
+			Console.WriteLine("figura: liniya (I).");
+		}
+	}
+
+	public class SquareFigure : TetrisFigure
+	{
+		public override void Display()
+		{
+			Console.WriteLine("figura: kvadrat (O).");
+		}
+	}
+
+	public class TFigure : TetrisFigure
+	{
+		public override void Display()
+		{
+			Console.WriteLine("figura: T.");
+		}
+	}
+
+	public class LFigure : TetrisFigure
+	{
+		public override void Display()
+		{
+			Console.WriteLine("figura: L.");
+		}
+	}
+
+	public class ZFigure : TetrisFigure
+	{
+		public override void Display()
+		{
+			Console.WriteLine("figura: Z.");
+		}
+	}
+
+	public class SuperFigure : TetrisFigure
+	{
+		public override void Display()
+		{
+			Console.WriteLine("superfigura: Blok iz 6 kletok");
+		}
+	}
+
+	public abstract class TetrisFigureFactory
+	{
+		public abstract TetrisFigure CreateFigure();
+	}
+
+	public class RandomTetrisFigureFactory : TetrisFigureFactory
+	{
+		private static readonly Random random = new Random();
+
+		public override TetrisFigure CreateFigure()
+		{
+			int choice = random.Next(0, 10);
+
+			switch (choice)
+			{
+				case 0:
+					return new LineFigure();
+				case 1:
+					return new SquareFigure();
+				case 2:
+					return new TFigure();
+				case 3:
+					return new LFigure();
+				case 4:
+					return new ZFigure();
+				case 5:
+					return new LineFigure();
+				case 6:
+					return new SquareFigure();
+				case 7:
+					return new TFigure();
+				case 8:
+				case 9:
+					return new SuperFigure();
+				default:
+					throw new InvalidOperationException("Neizvestni vibor figuri");
+			}
+		}
+	}
+
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			TetrisFigureFactory factory = new RandomTetrisFigureFactory();
+
+			Console.WriteLine("Generator: ");
+			for (int i = 0; i < 10; i++)
+			{
+				TetrisFigure figure = factory.CreateFigure();
+				figure.Display();
+			}
+		}
+	}
+}

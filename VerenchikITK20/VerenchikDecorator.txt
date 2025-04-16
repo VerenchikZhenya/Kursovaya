@@ -1,0 +1,85 @@
+using System;
+
+namespace VerenchikDecorator
+{
+	public interface IUniversalCard
+	{
+		void DisplayFunctions();
+	}
+	public class BasicCard : IUniversalCard
+	{
+		public void DisplayFunctions()
+		{
+			Console.WriteLine("f: Udostoverenie lichnosti");
+		}
+	}
+
+	public abstract class CardDecorator : IUniversalCard
+	{
+		protected IUniversalCard _card;
+
+		public CardDecorator(IUniversalCard card)
+		{
+			_card = card;
+		}
+
+		public virtual void DisplayFunctions()
+		{
+			_card.DisplayFunctions();
+		}
+	}
+
+	public class InsurancePolicyDecorator : CardDecorator
+	{
+		public InsurancePolicyDecorator(IUniversalCard card) : base(card) { }
+
+		public override void DisplayFunctions()
+		{
+			base.DisplayFunctions();
+			Console.WriteLine("f: Strahovoi polis");
+		}
+	}
+
+	public class BankCardDecorator : CardDecorator
+	{
+		public BankCardDecorator(IUniversalCard card) : base(card) { }
+
+		public override void DisplayFunctions()
+		{
+			base.DisplayFunctions();
+			Console.WriteLine("f: Bankovskaya karta");
+		}
+	}
+
+	public class MedicalCardDecorator : CardDecorator
+	{
+		public MedicalCardDecorator(IUniversalCard card) : base(card) { }
+
+		public override void DisplayFunctions()
+		{
+			base.DisplayFunctions();
+			Console.WriteLine("f: Medicinskaya karta");
+		}
+	}
+
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			IUniversalCard basicCard = new BasicCard();
+
+			IUniversalCard cardWithInsurance = new InsurancePolicyDecorator(basicCard);
+			IUniversalCard cardWithBanking = new BankCardDecorator(cardWithInsurance);
+			IUniversalCard fullCard = new MedicalCardDecorator(cardWithBanking);
+
+			Console.WriteLine("f u karti:");
+			fullCard.DisplayFunctions();
+
+			Console.WriteLine("Tolko udostoverenie lichnosti i strahovoi polis:");
+			cardWithInsurance.DisplayFunctions();
+
+			Console.WriteLine("Tolko udostoverenie lichnosti i strahovoi polis i bankovskaya karta:");
+			cardWithBanking.DisplayFunctions();
+		}
+	}
+}
